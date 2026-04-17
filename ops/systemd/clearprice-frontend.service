@@ -1,0 +1,22 @@
+[Unit]
+Description=ClearPrice Next.js Frontend
+After=network.target
+
+[Service]
+Type=exec
+User=clearprice
+Group=clearprice
+WorkingDirectory=/opt/clearprice/frontend
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=0.0.0.0
+Environment=NEXT_PUBLIC_API_URL=http://10.10.100.33:8000
+Environment=NEXT_PUBLIC_SITE_URL=https://clearpricehealth.org
+ExecStart=/usr/bin/node /opt/clearprice/frontend/.next/standalone/server.js
+Restart=always
+RestartSec=5
+StandardOutput=append:/opt/clearprice/logs/frontend.log
+StandardError=append:/opt/clearprice/logs/frontend.log
+
+[Install]
+WantedBy=multi-user.target

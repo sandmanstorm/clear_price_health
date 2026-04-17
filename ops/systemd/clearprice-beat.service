@@ -1,0 +1,21 @@
+[Unit]
+Description=ClearPrice Celery Beat Scheduler
+After=network.target redis-server.service
+Wants=redis-server.service
+
+[Service]
+Type=exec
+User=clearprice
+Group=clearprice
+WorkingDirectory=/opt/clearprice/backend
+Environment="PATH=/opt/clearprice/backend/venv/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/opt/clearprice/backend"
+EnvironmentFile=/opt/clearprice/backend/.env
+ExecStart=/opt/clearprice/backend/venv/bin/celery -A app.tasks.celery_app beat --loglevel=info --schedule=/opt/clearprice/backend/celerybeat-schedule
+Restart=always
+RestartSec=10
+StandardOutput=append:/opt/clearprice/logs/beat.log
+StandardError=append:/opt/clearprice/logs/beat.log
+
+[Install]
+WantedBy=multi-user.target
